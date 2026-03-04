@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typing Speed Test App</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        width: 600px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+    }
+
+    #paragraph {
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        resize: none;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #startBtn {
+        background-color: #28a745;
+        color: white;
+    }
+
+    #submitBtn {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .result {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>⌨ Typing Speed Test</h2>
+
+    <div id="paragraph"></div>
+
+    <textarea id="inputText" placeholder="Start typing here..." disabled></textarea>
+
+    <br>
+    <button id="startBtn">Start Test</button>
+    <button id="submitBtn" disabled>Submit</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+const paragraphs = [
+    "Technology is transforming the world rapidly and creating new opportunities for innovation and development.",
+    "Programming helps in building logical thinking and problem solving skills which are essential in modern careers.",
+    "Consistency and practice are the keys to improving typing speed and reducing errors effectively."
+];
+
+const paragraphElement = document.getElementById("paragraph");
+const inputText = document.getElementById("inputText");
+const startBtn = document.getElementById("startBtn");
+const submitBtn = document.getElementById("submitBtn");
+const result = document.getElementById("result");
+
+let startTime, endTime, selectedParagraph;
+
+// Start Test
+startBtn.addEventListener("click", () => {
+    selectedParagraph = paragraphs[Math.floor(Math.random() * paragraphs.length)];
+    paragraphElement.textContent = selectedParagraph;
+    inputText.value = "";
+    inputText.disabled = false;
+    inputText.focus();
+    startTime = new Date().getTime();
+    submitBtn.disabled = false;
+    result.textContent = "";
+});
+
+// Submit Test
+submitBtn.addEventListener("click", () => {
+    endTime = new Date().getTime();
+    const totalTime = (endTime - startTime) / 1000; // seconds
+    const typedText = inputText.value;
+
+    // Calculate WPM
+    const wordCount = typedText.trim().split(/\s+/).length;
+    const wpm = Math.round((wordCount / totalTime) * 60);
+
+    // Calculate Errors
+    let errors = 0;
+    for (let i = 0; i < selectedParagraph.length; i++) {
+        if (typedText[i] !== selectedParagraph[i]) {
+            errors++;
+        }
+    }
+
+    result.innerHTML = `
+        ⏱ Time Taken: ${totalTime.toFixed(2)} seconds <br>
+        📝 Words Per Minute (WPM): ${wpm} <br>
+        ❌ Errors: ${errors}
+    `;
+
+    inputText.disabled = true;
+    submitBtn.disabled = true;
+});
+</script>
+
+</body>
+</html>
